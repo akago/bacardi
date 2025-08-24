@@ -42,6 +42,7 @@ public class SpoonConstructExtractor {
         List<String> classNamesJapicmp = classes.stream()
                 .map(JApiClass::getFullyQualifiedName)
                 .toList();
+        System.out.println(classNamesJapicmp);
 
         Set<ApiChange> apiChanges = this.japicmpAnalyzer.getAllChanges(classes);
 
@@ -82,8 +83,14 @@ public class SpoonConstructExtractor {
             value.forEach(errorInfo -> {
                 // all elements from the buggy line in the client application code
                 Set<CtElement> elements = spoonUtilities.localizeErrorInfoElements(errorInfo);
-
-
+                if (elements.isEmpty()) {
+                    log.warn("No elements found for error: {} in file: {}", errorInfo, key);
+                    return;
+                }
+                System.out.println("========================================");
+                System.out.println("Elements found for error: " + errorInfo + " in file: " + key);
+                System.out.println(elements);
+                System.out.println("========================================");
                 Set<DetectedFileWithErrors> detectedElements = spoonUtilities.filterElements(elements, classNamesJapicmp, apiChanges);
 
                 detectedElements.forEach(d -> {

@@ -10,10 +10,19 @@ import java.io.IOException;
 public class Main {
     private static final Logger log = LoggerFactory.getLogger(Main.class);
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        Map<String, String> options = parseArgs(args);
 
-        File logFile = new File("/Users/frank/Documents/Work/PHD/bacardi/projects/bd3ce213e2771c6ef7817c80818807a757d4e94a/OCR4all/bd3ce213e2771c6ef7817c80818807a757d4e94a.log");
+        if (options.containsKey("help") || !options.containsKey("log") {
+            printUsage();
+            return;
+        }
 
+        File logFile = new File(options.get("log"));
+        if (!logFile.exists()) {
+            log.error("Log file not found: {}", logFile.getAbsolutePath());
+            return;
+        }
         log.info("Analyzing log file: {}", logFile.getAbsolutePath());
 
         FailureCategoryExtract failureCategoryExtract = new FailureCategoryExtract(logFile);
